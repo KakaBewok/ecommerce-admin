@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Admin dashboard",
-  description: "Admin dashboard",
+  description: "Admin dashboard for e-commerce",
 };
 
 export default function RootLayout({
