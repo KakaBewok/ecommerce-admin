@@ -10,12 +10,14 @@ import { Store } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronsUpDown, Store as StoreIcon } from "lucide-react";
+import { Check, ChevronsUpDown, Store as StoreIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
+  CommandItem,
   CommandList,
 } from "@/components/ui/command";
 
@@ -70,6 +72,25 @@ export default function StoreSwitcher({
           <CommandList>
             <CommandInput placeholder="Search store..." />
             <CommandEmpty>No store found.</CommandEmpty>
+            <CommandGroup heading="Stores">
+              {formattedItems.map((store) => (
+                <CommandItem
+                  key={store.value}
+                  onSelect={() => onStoreSelect(store)}
+                >
+                  <StoreIcon className="mr-2 w-4 h-4 " />
+                  {store.label}
+                  <Check
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      currentStore?.value === store.value
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
