@@ -8,6 +8,7 @@ const Navbar = async () => {
   const { userId } = auth();
   if (!userId) redirect("/sign-in");
 
+  //get all stores
   const stores = await prismadb.store.findMany({
     where: {
       userId,
