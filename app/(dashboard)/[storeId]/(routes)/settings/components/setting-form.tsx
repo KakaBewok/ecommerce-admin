@@ -15,6 +15,7 @@ import {
   FormItem,
   FormLabel,
   Form,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -69,10 +70,15 @@ export const SettingForm: React.FC<SettingFormProps> = ({ initialData }) => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          <Button disabled={loading} className="ml-auto" type="submit">
+            Save changes
+          </Button>
         </form>
       </Form>
     </>
