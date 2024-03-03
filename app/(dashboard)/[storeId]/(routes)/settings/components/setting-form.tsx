@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
+import { AlertModal } from "@/components/modal/alert-modal";
 
 interface SettingFormProps {
   initialData: Store;
@@ -59,6 +60,12 @@ export const SettingForm: React.FC<SettingFormProps> = ({ initialData }) => {
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={() => {}}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title="Setting" description="Manage store preference" />
         <Button
