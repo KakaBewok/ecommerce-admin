@@ -23,6 +23,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 interface SettingFormProps {
   initialData: Store;
@@ -37,6 +38,8 @@ type SettingFormValues = z.infer<typeof formSchema>;
 export const SettingForm: React.FC<SettingFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
+  const originUrl = useOrigin();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -130,7 +133,7 @@ export const SettingForm: React.FC<SettingFormProps> = ({ initialData }) => {
 
       <ApiAlert
         title="NEXT_PUBLIC_API_URL"
-        description="test desc"
+        description={`${originUrl}/api/${params.storeId}`}
         variant="public"
       />
     </>
