@@ -22,7 +22,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modal/alert-modal";
-import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
@@ -41,7 +40,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  const originUrl = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,10 +62,19 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
-      router.refresh(); // for syncronize component
 
-      toast.success("Store updated.");
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          data
+        );
+      } else {
+        await axios.post(`/api/${params.storeId}/billboards`, data);
+      }
+
+      router.refresh(); // for syncronize component
+      router.push(`/${params.storeId}/billboards`);
+      toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
@@ -78,14 +85,20 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
-      router.refresh(); // for syncronize component
+
+      await axios.delete(
+        `/api/${params.storeId}/billboards/${params.billboardId}`
+      );
+
+      router.refresh();
       window.location.reload();
       router.push("/");
 
-      toast.success("Store deleted.");
+      toast.success(toastMessage);
     } catch (error) {
-      toast.error("Make sure you remove all products and categories first.");
+      toast.error(
+        "Make sure you remove all categories using this billboard first."
+      );
     } finally {
       setLoading(false);
       setOpen(false);
