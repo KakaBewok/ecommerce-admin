@@ -2,12 +2,17 @@
 
 import {
   ColumnDef,
+  SortingState,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import {
   Table,
@@ -17,25 +22,53 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchKey: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  searchKey,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   });
 
   return (
     <div>
+      {/* filtering */}
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Search"
+          value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn(searchKey)?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
+      {/* main table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -86,6 +119,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+      {/* pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
