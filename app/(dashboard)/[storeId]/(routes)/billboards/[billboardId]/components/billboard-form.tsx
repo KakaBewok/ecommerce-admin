@@ -89,10 +89,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       await axios.delete(
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
-
+      router.push(`/${params.storeId}/billboards`);
       router.refresh();
-      window.location.reload();
-      router.push("/");
 
       toast.success(toastMessage);
     } catch (error) {
@@ -175,7 +173,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </Button>
         </form>
       </Form>
-      <Separator />
     </>
   );
 };
