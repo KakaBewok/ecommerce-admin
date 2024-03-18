@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-import { BillboardColumn } from "./columns";
+import { CategoryColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ import axios from "axios";
 import { AlertModal } from "@/components/modal/alert-modal";
 
 interface CellActionProps {
-  data: BillboardColumn;
+  data: CategoryColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -28,20 +28,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Id billboard copied.");
+    toast.success("Id category copied.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
 
-      await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
       router.refresh();
 
-      toast.success("Billboard deleted.");
+      toast.success("Category deleted.");
     } catch (error) {
       toast.error(
-        "Make sure you remove all categories using this billboard first."
+        "Make sure you remove all products using this category first."
       );
     } finally {
       setLoading(false);
@@ -72,7 +72,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/categories/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />
